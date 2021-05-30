@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 class SecondFragment : Fragment() {
+    var navigator: Navigator? = null
 
     private var backButton: Button? = null
     private var result: TextView? = null
@@ -29,16 +30,17 @@ class SecondFragment : Fragment() {
         val min = arguments?.getInt(MIN_VALUE_KEY) ?: 0
         val max = arguments?.getInt(MAX_VALUE_KEY) ?: 0
 
-        result?.text = generate(min, max).toString()
+        val random = generate(min, max)
+        navigator?.saveGeneratedNumber(random)
+        result?.text = random.toString()
 
         backButton?.setOnClickListener {
-            // TODO: implement back
+            navigator?.openFirstFragment()
         }
     }
 
     private fun generate(min: Int, max: Int): Int {
-        // TODO: generate random number
-        return 0
+        return (min..max).random()
     }
 
     companion object {
@@ -48,7 +50,9 @@ class SecondFragment : Fragment() {
             val fragment = SecondFragment()
             val args = Bundle()
 
-            // TODO: implement adding arguments
+            args.putInt(MIN_VALUE_KEY, min)
+            args.putInt(MAX_VALUE_KEY, max)
+            fragment.arguments = args
 
             return fragment
         }
